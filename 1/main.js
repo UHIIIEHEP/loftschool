@@ -1,30 +1,34 @@
 /* eslint-disable no-extra-boolean-cast */
   
-import { readdir, opendir, mkdir, stat, copyFile as _copyFile, existsSync, readdirSync, statSync, unlinkSync, rmdirSync } from 'fs';
-import { join, parse } from 'path';
+// import { readdir, opendir, mkdir, stat, copyFile as _copyFile, existsSync, readdirSync, statSync, unlinkSync, rmdirSync } from 'fs';
+// import { join, parse } from 'path';
+
+  
+const fs = require ('fs');
+const path = require ('path');
 
 
 // eslint-disable-next-line no-undef
-const source = process.env.SOURCE || join(__dirname, './source-folder');
+const source = process.env.SOURCE || path.join(__dirname, './source-folder');
 // eslint-disable-next-line no-undef
-const target = process.env.TARGET || join(__dirname, './target-folder');
+const target = process.env.TARGET || path.join(__dirname, './target-folder');
 // const deleteSource = process.env.DELETE_SOURCE === 'true';
 
 
 const app = (source, target) => {
-  readdir(source, (err) => {
+  fs.readdir(source, (err) => {
     if (!!err) {
       console.log(`${source} not found. `, err);
       return;
     }
     
     const checkTargetFolder = (target) => {
-      opendir(target, (err) => {
+      fs.opendir(target, (err) => {
         // eslint-disable-next-line no-extra-boolean-cast
         if (!!err) {
           console.log(`${target} not found. Creating folder ...`);
           
-          mkdir(target, (err) => {
+          fs.mkdir(target, (err) => {
             if (!!err) {
               console.log('Error create target folder. ', err);
               return;
@@ -34,14 +38,14 @@ const app = (source, target) => {
         }
 
         const moveFile = (source, target) => {
-          readdir(source, (err, files) => {
+          fs.readdir(source, (err, files) => {
             if (!!err) {
               console.log(`Source folder not found ( ${source}  )`, err);
               return;
             }
 
             files.forEach(file => {
-              stat(join(source, file), (err, stats) => {
+              fs.stat(path.join(source, file), (err, stats) => {
                 if (!!err) {
                   console.log(`Error stat ${source}/${file} .`,err);
                   return;
@@ -50,7 +54,7 @@ const app = (source, target) => {
                 if (!stats.isDirectory()) {
                   let folderName = 'Other';
 
-                  const { name } = parse(join(source, file));
+                  const { name } = path.parse(path.join(source, file));
                   
                   for(let i = 0; i < name.length; i++) {
                     if ((/[a-z]|[A-Z]|[а-я]|[А-Я]/).test(name[i])) {
@@ -59,18 +63,18 @@ const app = (source, target) => {
                     }
                   }
         
-                  opendir(join(target, folderName), (err) => {
+                  fs.opendir(path.join(target, folderName), (err) => {
                     // eslint-disable-next-line no-extra-boolean-cast
                     if (!!err) {
-                      mkdir(join(target, folderName), () => {
-                        copyFile(source, join(target, folderName), file);
+                      fs.mkdir(path.join(target, folderName), () => {
+                        copyFile(source, path.join(target, folderName), file);
                       })
                     } else {
-                      copyFile(source, join(target, folderName), file);
+                      copyFile(source, path.join(target, folderName), file);
                     }
                   })
                 } else {
-                  moveFile(join(source, file), target);
+                  moveFile(path.join(source, file), target);
                 }
               });
             });
@@ -86,9 +90,9 @@ const app = (source, target) => {
 
 const copyFile = (oldFolder, newFolder, file) => {
   const newFile = generateFileName(newFolder, file);
-  _copyFile(join(oldFolder, file), join(newFolder, newFile), (err) => {
+  fs.copyFile(path.join(oldFolder, file), path.join(newFolder, newFile), (err) => {
     if (!!err) {
-      console.log(`Error copy file ${join(oldFolder, file)} to ${join(newFolder, newFile)}`,err);
+      console.log(`Error copy file ${path.join(oldFolder, file)} to ${path.join(newFolder, newFile)}`,err);
       return;
     }
   })
@@ -98,26 +102,26 @@ const generateFileName = (target, fileName) => {
   const {
     name,
     ext,
-  } = parse(join(target, fileName));
+  } = path.parse(path.join(target, fileName));
 
-  if (existsSync(join(target, fileName))) {
+  if (fs.existsSync(path.join(target, fileName))) {
     return generateFileName(target, `${name}_double${ext}`);
   }
   return fileName;
 }
 
 const deleteFolder = (source) => {
-  if (existsSync(source)) {
-    readdirSync(source).forEach(file => {
-      var nextLvl = join(source, file);
-        if (statSync(nextLvl).isDirectory()) {
+  if (fs.existsSync(source)) {
+    fs.readdirSync(source).forEach(file => {
+      var nextLvl = path.join(source, file);
+        if (fs.statSync(nextLvl).isDirectory()) {
           // eslint-disable-next-line no-unused-vars
           deleteFolder(nextLvl);
         } else {
-          unlinkSync(nextLvl);
+          fs.unlinkSync(nextLvl);
         }
       });
-    rmdirSync(source);
+      fs.rmdirSync(source);
   }
 }
 

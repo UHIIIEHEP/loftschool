@@ -4,7 +4,8 @@
   "description": "loftschool",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "hw:1": "node 1/main.js"
   },
   "repository": {
     "type": "git",

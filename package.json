@@ -1,0 +1,26 @@
+{
+  "name": "loftschool",
+  "version": "1.0.0",
+  "description": "loftschool",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://gitlab.com/UHIIIEHEP/loftschool.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://gitlab.com/UHIIIEHEP/loftschool/issues"
+  },
+  "homepage": "https://gitlab.com/UHIIIEHEP/loftschool#readme",
+  "dependencies": {
+    "eslint-config-standard": "^14.1.1"
+  },
+  "devDependencies": {
+    "eslint": "^7.7.0"
+  }
+}

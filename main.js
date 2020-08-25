@@ -16,7 +16,7 @@ const args = yargs
   .options('dist', {
     alias: 'd',
     description: 'Target folder',
-    default: './2/dist',
+    default: './dist',
   })
   .options('delete', {
     alias: 'd',
@@ -31,7 +31,6 @@ const app = async (entry, target) => {
   await fs.readdirSync(entry);
   await checkTargetFolder(target);
   await moveFile (entry, target);
-  console.log('DONE')
 }
 
 
@@ -92,4 +91,6 @@ const generateFileName = (target, fileName) => {
   return fileName;
 }
 
-app(args.entry, args.dist);
+app(args.entry, args.dist).then(()=> {
+  console.log('DONE')
+});

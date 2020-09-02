@@ -1,0 +1,30 @@
+extends ../_template
+
+block variables
+  - var title = 'Register page'
+
+block content
+  header.header
+    .container.header__container
+      .header__top
+        a(href="/").title-name Архипов
+          span.title-name__doter .
+        .header__social
+          ul.social
+            each item in social
+              li.social__item
+                a.social__link(href="http://")
+                  i(class=`fab ${item}`)
+
+      form(action="/register" method="POST").form-register
+        if (msgregister)
+          .status= msgregister
+        .form-register__line
+          label.form-register__label(for="") Привет,
+          input.form-register__input(type="email" name="email" placeholder="E-MAIL")
+        .form-register__line
+          input.form-register__input(type="password" name="password" placeholder="Пароль")
+        .form-register__line
+          input.form-register__input(type="role" name="role" placeholder="Роль")
+        .form-register__line
+          button(type="submit").form-register__button Зарегистрироваться

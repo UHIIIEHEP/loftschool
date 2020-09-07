@@ -5,7 +5,6 @@ require('dotenv').config();
 
 module.exports = {
   getLogin(req, res) {
-    console.log(res.cookies); //('jwt'));
     res.render('login');
   },
 
@@ -31,7 +30,7 @@ module.exports = {
 
         break;
       } else {
-        res.redirect('/login');
+        throw new Error ('bad_auth');
       }
     }
   },
@@ -50,7 +49,7 @@ module.exports = {
 
     for (const user of users) {
       if (user.email === email ) {
-        res.redirect('/register');
+        throw new Error ('email_use');
       }
     }
 

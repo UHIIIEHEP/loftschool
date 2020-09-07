@@ -6,7 +6,8 @@
   "scripts": {
     "start": "set NODE_ENV=development&& gulp",
     "build": "set NODE_ENV=production&& gulp build",
-    "start:back": "node server/server.js"
+    "start:back": "node server/server.js",
+    "start:dev": "nodemon server/server.js"
   },
   "devDependencies": {
     "babel-core": "^6.26.0",
@@ -46,6 +47,7 @@
     "crypto-js": "^4.0.0",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
+    "express-validation": "^3.0.6",
     "form-data": "^3.0.0",
     "formidable": "^1.2.2",
     "jquery": "^3.3.1",

@@ -12,7 +12,6 @@ const Guard = (req, res, next) => {
   
   if(decode) {
     req.body['user_id'] = decode['user_id'];
-    console.log('OK')
     next();
   } else {
     res.status(403);

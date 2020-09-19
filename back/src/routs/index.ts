@@ -20,18 +20,18 @@ router.get('', (req, res) => {
   res.sendFile(path.join(__dirname + './../../../../front/build/index.html'))
 })
 
-router.post('/api/registration', user.registration);//
-router.post('/api/login', user.login);//
-router.post('/api/refresh-token', Guard, user.updateToken);//
-router.get('/api/profile', Guard, user.profile);//
-router.patch('/api/profile', Guard, user.updateProfile); // avatar
-router.delete('/api/users/:id', Guard, user.deleteUser);//
-router.get('/api/users', Guard, user.getUsers);//
-router.patch('/api/users/:id/permission', Guard, user.permissionUser);//
+router.post('/registration', user.registration);
+router.post('/login', user.login);
+router.post('/refresh-token', Guard, user.updateToken);
+router.get('/profile', Guard, user.profile);
+router.patch('/profile', Guard, user.updateProfile);
+router.delete('/users/:id', Guard, user.deleteUser);
+router.get('/users', Guard, user.getUsers);
+router.patch('/users/:id/permission', Guard, user.permissionUser);
 
-router.get('/api/news', Guard, news.getNews);//
-router.post('/api/news', Guard, news.setNews);//
-router.patch('/api/news/:id', Guard, news.updateNews);
-router.delete('/api/news/:id', Guard, news.deleteNews);//
+router.get('/news', Guard, news.getNews);
+router.post('/news', Guard, news.setNews);
+router.patch('/news/:id', Guard, news.updateNews);
+router.delete('/news/:id', Guard, news.deleteNews);
 
 module.exports = router;

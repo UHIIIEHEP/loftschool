@@ -2,7 +2,6 @@ import { newsList, newsCreate, newsDelete, newsUpdate } from '../../../service/n
 
 const news = {
   getNews: async(req, res) => {
-    console.log('GET NEWS!!!')
     const result = await newsList();
     res.send(result);
   },

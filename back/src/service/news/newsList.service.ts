@@ -12,7 +12,7 @@ const newsList = async () => {
 
       return news.map((elem: any) => {
       return ({
-        id: elem.news_id,
+        id: String(elem.news_id),
         created_at: elem.created_at,
         text: elem.text,
         title: elem.title,

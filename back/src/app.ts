@@ -13,6 +13,8 @@ const port: number = Number(process.env.APP_PORT) || 3000;
 const server = http.createServer(app);
 const io = socket_io.listen(server);
 
+// app.use('/api/profile',express.static(path.join(__dirname + './../../../front/upload/avatar')));
+app.use(express.static(path.join(__dirname + './../../../front')));
 app.use(express.static(path.join(__dirname + './../../../front/build')));
 
 app.use(bodyParser.json());
@@ -20,10 +22,10 @@ app.use(bodyParser.urlencoded({extended: false}));
 
 app.use('/api', require('./routs'));
 
-app.use('*', (req, res) => {
-  const file = path.resolve(process.cwd(), '../front', 'build', 'index.html')
-  res.sendFile(file)
-});
+// app.use('*', (req, res) => {
+//   const file = path.resolve(process.cwd(), '../front', 'build', 'index.html')
+//   res.sendFile(file)
+// });
 
 server.listen(port, () => {
   console.log('Server start. Port ', port)

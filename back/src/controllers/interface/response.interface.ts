@@ -58,7 +58,7 @@ export interface IUserNews {
 }
 
 export interface INewsRespone {
-    id: number,
+    id: string,
     created_at: Date,
     text: String,
     title: String,

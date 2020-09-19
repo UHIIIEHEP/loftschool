@@ -150,15 +150,7 @@ const user = {
   },
 
   updateProfile: async(req, res) => {
-    const { user_id } = req.body
-    
-
-
-
-
-
-
-
+    const { user_id } = req.body;
 
     const form = new formidable.IncomingForm();
 
@@ -166,16 +158,18 @@ const user = {
     form.parse(req, (err, fields, files) => {
       
       if (!!files.avatar) {
-
-        const upload = path.resolve(process.cwd(), '../front/public/assets/avatar');
+        const upload = path.resolve(process.cwd(),'../front/upload/avatar');
 
         if (!fs.existsSync(upload)) {
           fs.mkdirSync(upload);
         }
 
-        const fileName = `./assets/avatar/${files.avatar.name}`;
+        form.uploadDir = upload;
+        
+        const fileName = path.join('upload/avatar', files.avatar.name);
 
         fs.rename(files.avatar.path, fileName, async () => {
+          console.log(fileName)
           await createConnection.then(async connection => {
             const reposytory = connection.getRepository(User);
             return await reposytory
@@ -183,18 +177,13 @@ const user = {
                 user_id,
               },
               {
+                // avatar: `upload/avatar/${files.avatar.name}`
                 avatar: fileName
               });
           });
           res.send(req.files)
         });
       }
-
-
-
-
-
-
 
       for (const key in fields) {
         if (fields[key] !== 'undefined' && fields[key] !== '' && fields[key] !== 'null') {
@@ -220,7 +209,6 @@ const user = {
         .findOne({user_id})
         .then(res => res);
     });
-
     
     const {
       token: refreshToken,
@@ -251,6 +239,8 @@ const user = {
       accessTokenExpiredAt,
       refreshTokenExpiredAt,
     };
+
+    console.log('@@@@ ', result)
     
     res.send(result);
   },

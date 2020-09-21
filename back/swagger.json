@@ -1,0 +1,110 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "description": "This is a sample server Petstore server.  You can find out more about     Swagger at [http://swagger.io](http://swagger.io) or on [irc.freenode.net, #swagger](http://swagger.io/irc/).      For this sample, you can use the api key `special-key` to test the authorization     filters.",
+    "version": "1.0.0",
+    "title": "Swagger Petstore",
+    "termsOfService": "http://swagger.io/terms/",
+    "contact": {
+      "email": "apiteam@swagger.io"
+    },
+    "license": {
+      "name": "Apache 2.0",
+      "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+    }
+  },
+  "host": "localhost:3500",
+  "basePath": "",
+  "tags": [
+    {
+      "name": "user",
+      "description": "Everything about your User"
+    },
+    {
+      "name": "news",
+      "description": "Access to Petstore orders"
+    }
+  ],
+  "schemes": [
+    "http",
+    "https"
+  ],
+
+
+  "paths": {
+    "/api/registration": {
+      "post": {
+        "tags": [
+          "user"
+        ],
+        "summary": "Add a new user to the store",
+        "description": "",
+        "operationId": "registrationUser",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/xml"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Pet object that needs to be added to the store",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+            }
+          }
+        }
+
+      }
+    }
+
+  },
+  "securityDefinitions": {
+    "petstore_auth": {
+      "type": "oauth2",
+      "authorizationUrl": "http://petstore.swagger.io/oauth/dialog",
+      "flow": "implicit",
+      "scopes": {
+        "write:pets": "modify pets in your account",
+        "read:pets": "read your pets"
+      }
+    },
+    "api_key": {
+      "type": "apiKey",
+      "name": "api_key",
+      "in": "header"
+    }
+  },
+  "definitions": {
+    "User": {
+      "type":"object",
+      "properties": {
+        "username": {
+          "type": "string"
+        },
+        "surname": {
+          "type": "string"
+        },
+        "firstname": {
+          "type": "string"
+        },
+        "middlename": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}

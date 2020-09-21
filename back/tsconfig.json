@@ -1,0 +1,18 @@
+{
+  "compilerOptions": {
+      "paths": { "*": ["types/*"] },
+    "module": "commonjs",
+    "removeComments": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "target": "es6",
+    "sourceMap": true,
+    "outDir": "./dist/src",
+    "baseUrl": "./app.ts",
+    "incremental": true,
+    "allowJs": true,
+    "esModuleInterop": true
+  },
+  "include": ["src/**/*", ".eslintrc.js", "migrations", "../migrations"],
+  "exclude": ["node_modules", "**/*.spec.ts"]
+}

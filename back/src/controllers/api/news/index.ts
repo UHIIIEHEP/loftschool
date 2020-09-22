@@ -23,7 +23,7 @@ const news = {
       text: req.body.text,
       title: req.body.title,
     }
-    console.log(req.params.id, payload)
+    
     await newsUpdate(req.params.id, payload);
 
     const result = await newsList();

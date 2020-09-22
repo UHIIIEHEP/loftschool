@@ -152,36 +152,27 @@ const user = {
   updateProfile: async(req, res) => {
     const { user_id } = req.body;
 
-    const form = new formidable.IncomingForm();
+    const form = new formidable.IncomingForm({
+      uploadDir: path.resolve(process.cwd(),'../front/upload/avatar'),
+    });
 
     let userInfoUpdate = {};
-    form.parse(req, (err, fields, files) => {
-      
+    await form.parse(req, async (err, fields, files) => {
       if (!!files.avatar) {
         const upload = path.resolve(process.cwd(),'../front/upload/avatar');
 
         if (!fs.existsSync(upload)) {
           fs.mkdirSync(upload);
         }
-
-        form.uploadDir = upload;
         
-        const fileName = path.join('upload/avatar', files.avatar.name);
+        const fileName = path.join(upload, files.avatar.name);
 
-        fs.rename(files.avatar.path, fileName, async () => {
-          console.log(fileName)
-          await createConnection.then(async connection => {
-            const reposytory = connection.getRepository(User);
-            return await reposytory
-              .update({
-                user_id,
-              },
-              {
-                // avatar: `upload/avatar/${files.avatar.name}`
-                avatar: fileName
-              });
-          });
-          res.send(req.files)
+        userInfoUpdate['avatar'] = `upload/avatar/${files.avatar.name}`;
+
+        fs.rename(files.avatar.path, fileName, (err) => {
+          if (err !== null) {
+            console.log({err})
+          }
         });
       }
 
@@ -190,59 +181,53 @@ const user = {
           userInfoUpdate[key.toLowerCase()] = fields[key];
         }
       }
-    });
 
-    if (!userInfoUpdate) {
       await createConnection.then(async connection => {
-        const reposytory = connection.getRepository(User);
-        return await reposytory
+        return await connection.getRepository(User)
           .update({
             user_id,
           },
           userInfoUpdate);
       });
-    }
 
-    const userInfo: ILoginUserResponse = await createConnection.then(async connection => {
-      const reposytory = connection.getRepository(User);
-      return await reposytory
-        .findOne({user_id})
-        .then(res => res);
+      const userInfo: ILoginUserResponse = await createConnection.then(async connection => {
+        return await connection.getRepository(User)
+          .findOne({user_id})
+          .then(res => res);
+      });
+      
+      const {
+        token: refreshToken,
+        dateDead: refreshTokenExpiredAt
+      } = generateToken({
+        user_id,
+      },
+      'refresh')
+  
+      const {
+        token: accessToken,
+        dateDead: accessTokenExpiredAt
+      } = generateToken({
+        user_id,
+      },
+      'access')
+  
+      const result: IUserAuthResponse = {
+        id: userInfo.user_id,
+        surName: userInfo.surname,
+        middleName: userInfo.middlename,
+        firstName: userInfo.firstname,
+        image: userInfo.avatar,
+        username: userInfo.username,     
+        permission: JSON.parse(userInfo.permission),       
+        accessToken,
+        refreshToken,
+        accessTokenExpiredAt,
+        refreshTokenExpiredAt,
+      };
+      
+      res.send(result);
     });
-    
-    const {
-      token: refreshToken,
-      dateDead: refreshTokenExpiredAt
-    } = generateToken({
-      user_id,
-    },
-    'refresh')
-
-    const {
-      token: accessToken,
-      dateDead: accessTokenExpiredAt
-    } = generateToken({
-      user_id,
-    },
-    'access')
-
-    const result: IUserAuthResponse = {
-      id: userInfo.user_id,
-      surName: userInfo.surname,
-      middleName: userInfo.middlename,
-      firstName: userInfo.firstname,
-      image: userInfo.avatar,
-      username: userInfo.username,     
-      permission: JSON.parse(userInfo.permission),       
-      accessToken,
-      refreshToken,
-      accessTokenExpiredAt,
-      refreshTokenExpiredAt,
-    };
-
-    console.log('@@@@ ', result)
-    
-    res.send(result);
   },
 
   deleteUser: async (req, res) => {

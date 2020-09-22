@@ -1,9 +1,6 @@
 // const { Router } = require('express');
 import express from 'express';
 import path from 'path';
-import swaggerUi from 'swagger-ui-express';
-
-const swaggerDocument = require('../../../swagger.json');
 
 require('dotenv').config();
 
@@ -12,9 +9,6 @@ import news from '../controllers/api/news'
 import Guard from '../guards/index.guards';
 
 const router = express.Router();
-
-router.use('/docs', swaggerUi.serve);
-router.get('/docs', swaggerUi.setup(swaggerDocument));
 
 router.get('', (req, res) => {
   res.sendFile(path.join(__dirname + './../../../../front/build/index.html'))
